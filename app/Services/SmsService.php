@@ -1,0 +1,42 @@
+<?php 
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\Log;
+use Twilio\Rest\Client;
+
+class SmsService {
+    public function sendSms(string $mobile_number, string $message): void
+    {
+        try {
+            Log::info('Attempting to send SMS', [
+                'mobile_number' => $mobile_number,
+                'message' => $message
+            ]);
+
+            $twilio = new Client(
+                config('services.twilio.account_sid'),
+                config('services.twilio.auth_token')
+            );
+
+            $response = $twilio->messages->create(
+                '+63' . $mobile_number,
+                [
+                    'from' => config('services.twilio.from_number'),
+                    'body' => $message,
+                ]
+            );
+
+            Log::info('SMS sent successfully', [
+                'sid' => $response->sid,
+                'status' => $response->status
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to send SMS', [
+                'mobile_number' => $mobile_number,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+    }
+}
