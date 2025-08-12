@@ -10,17 +10,17 @@ class SmsService
     public function sendSms(string $mobile_number, string $message): void
     {
         try {
-            Log::info('Attempting to send SMS', [
-                'mobile_number' => $mobile_number,
-                'message' => $message
-            ]);
-
             $twilio = new Client(
                 config('services.twilio.account_sid'),
                 config('services.twilio.auth_token')
             );
 
             $phoneNumber = '+63' . $mobile_number;
+
+            Log::info('Attempting to send SMS', [
+                'mobile_number' => $phoneNumber,
+                'message' => $message
+            ]);
 
             $response = $twilio->messages->create(
                 $phoneNumber,
