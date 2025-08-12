@@ -29,14 +29,6 @@ class RecentAlertObserver
                 'Location: ' . $recentAlert->patient->room . '/' . $recentAlert->patient->bed_number . '\n' .
                 'Action Needed: Immediate check-up required.'
         );
-
-        Log::info('SMS alert sent successfully', [
-            'patient_id' => $recentAlert->patient_id,
-            'caregiver_number' => $recentAlert->caregiver->mobile_number,
-            'alert_type' => $recentAlert->alert_type,
-            'bpm' => $recentAlert->bpm,
-            'alert_id' => $recentAlert->id
-        ]);
     }
 
     /**
