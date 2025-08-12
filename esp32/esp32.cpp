@@ -3,9 +3,9 @@
 #include <ArduinoJson.h>
 
 // ===================== CONFIGURATION =====================
-constexpr char WIFI_SSID[]     = "Doctora Wifi 2.4G";
-constexpr char WIFI_PASSWORD[] = "pitterdoctorawifi";
-constexpr char SERVER_IP[]     = "192.168.18.161";
+constexpr char WIFI_SSID[]     = "YOUR_WIFI_SSID";
+constexpr char WIFI_PASSWORD[] = "YOUR_WIFI_PASSWORD";
+constexpr char SERVER_IP[]     = "YOUR_SERVER_IP";
 constexpr char DEVICE_ID[]     = "esp32-01";
 
 // PulseSensor configuration for HW-827

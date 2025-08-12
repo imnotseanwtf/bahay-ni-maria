@@ -1,11 +1,12 @@
-<?php 
+<?php
 
 namespace App\Services;
 
 use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client;
 
-class SmsService {
+class SmsService
+{
     public function sendSms(string $mobile_number, string $message): void
     {
         try {
@@ -19,8 +20,10 @@ class SmsService {
                 config('services.twilio.auth_token')
             );
 
+            $phoneNumber = '+63' . $mobile_number;
+
             $response = $twilio->messages->create(
-                '+63' . $mobile_number,
+                $phoneNumber,
                 [
                     'from' => config('services.twilio.from_number'),
                     'body' => $message,

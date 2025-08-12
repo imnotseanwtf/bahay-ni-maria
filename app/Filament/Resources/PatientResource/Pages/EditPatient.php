@@ -45,7 +45,7 @@ class EditPatient extends EditRecord
                     ->schema([
                         TextInput::make('device_identifier')
                             ->required()
-                            ->unique()
+                            ->unique(ignoreRecord: true)
                             ->maxLength(255),
 
                         Select::make('caregiver_id')

@@ -68,9 +68,9 @@ class StoreSensorValueController extends Controller
 
             $bpmData = SensorsValue::where('patient_id', $patient->id)
                 ->where('created_at', '>=', now()->subMinutes(10))
+                ->limit(10)
                 ->get()
                 ->pluck('bpm')
-                ->limit(10)
                 ->toArray();
 
             Log::info('BPM data retrieved', [
@@ -92,8 +92,8 @@ class StoreSensorValueController extends Controller
                 'timestamp' => now()->toDateTimeString(),
                 'alert_threshold_reached' => $isBPMAlert ? 'yes' : 'no'
             ]);
-
-            if ($isBPMAlert) {
+            
+            if (!$isBPMAlert) {
                 $alert = RecentAlert::create([
                     'patient_id' => $patient->id,
                     'alert_type' => AlertType::PulseRate(),

@@ -19,13 +19,14 @@ class RecentAlertsTable extends BaseWidget
                 RecentAlert::query()
             )
             ->columns([
-                Tables\Columns\TextColumn::make('patient.name')
+                Tables\Columns\TextColumn::make('full_name')
+                    ->getStateUsing(fn(RecentAlert $record) => $record->patient->first_name . ' ' . $record->patient->middle_name . ' ' . $record->patient->last_name)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('alert_type')
                     ->formatStateUsing(fn(AlertType $state) => $state->description),
                 Tables\Columns\TextColumn::make('bpm')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('caregiver.name')
                     ->searchable(),
             ])
             ->defaultSort('created_at', 'desc');

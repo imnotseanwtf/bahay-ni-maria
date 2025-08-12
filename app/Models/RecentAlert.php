@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Enums\AlertType;
+use App\Observers\RecentAlertObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[ObservedBy([RecentAlertObserver::class])]
 class RecentAlert extends Model
 {
     /** @use HasFactory<\Database\Factories\RecentAlertFactory> */
