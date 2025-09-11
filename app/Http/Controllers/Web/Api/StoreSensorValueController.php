@@ -6,6 +6,7 @@ use App\Enums\AlertType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSensorValueRequest;
 use App\Models\Patient;
+use App\Models\RealtimeLocation;
 use App\Models\RecentAlert;
 use App\Models\SensorsValue;
 use App\Services\BPMService;
@@ -51,6 +52,14 @@ class StoreSensorValueController extends Controller
             $sensor = SensorsValue::create($request->except('device_identifier') + [
                 'patient_id' => $patient->id,
             ]);
+
+            if($request->latitude && $request->longitude) {
+                RealtimeLocation::create([
+                    'patient_id' => $patient->id,
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
+                ]);
+            }
 
             Log::info('Sensor value stored successfully', [
                 'patient_id' => $patient->id,

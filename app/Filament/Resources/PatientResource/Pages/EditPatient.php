@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PatientResource\Pages;
 use App\Enums\MaritalStatus;
 use App\Filament\Resources\PatientResource;
 use App\Filament\Widgets\BpmMonitoring;
+use App\Filament\Widgets\MapWidget;
 use Filament\Actions;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
@@ -28,9 +29,12 @@ class EditPatient extends EditRecord
     public function getHeaderWidgets(): array
     {
         BpmMonitoring::$can_view = true;
-
+        MapWidget::$can_view = true;
         return [
             BpmMonitoring::make([
+                'patient_id' => $this->record->id,
+            ]),
+            MapWidget::make([
                 'patient_id' => $this->record->id,
             ]),
         ];

@@ -24,6 +24,8 @@ class StoreSensorValueRequest extends FormRequest
          return [
             'bpm' => ['required', 'numeric'],
             'device_identifier' => ['required'],
+            'latitude' => ['nullable'],
+            'longitude' => ['nullable'],
         ];
     }
 }
