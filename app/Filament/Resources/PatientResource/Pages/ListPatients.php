@@ -10,6 +10,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Query\Builder;
 
 class ListPatients extends ListRecords
 {
@@ -22,7 +23,7 @@ class ListPatients extends ListRecords
         ];
     }
 
-     public function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -47,6 +48,11 @@ class ListPatients extends ListRecords
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(function (Builder $query) {
+                if (auth()->user()->isCaregiver()) {
+                    $query->where('caregiver_id', auth()->user()->id);
+                }
+            });
     }
 }
