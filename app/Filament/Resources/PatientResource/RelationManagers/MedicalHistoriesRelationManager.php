@@ -34,6 +34,10 @@ class MedicalHistoriesRelationManager extends RelationManager
                             ->rows(4)
                             ->maxLength(1000)
                             ->columnSpan(1),
+
+                        Forms\Components\DatePicker::make('schedule_date')
+                            ->required()
+                            ->columnSpan('full'),
                     ])
                     ->columns(2),
             ]);
@@ -44,6 +48,8 @@ class MedicalHistoriesRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('medical_problems'),
+                Tables\Columns\TextColumn::make('schedule_date')
+                    ->date(),   
             ])
             ->filters([
                 //
@@ -59,6 +65,7 @@ class MedicalHistoriesRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

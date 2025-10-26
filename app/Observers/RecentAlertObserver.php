@@ -5,6 +5,8 @@ namespace App\Observers;
 use App\Models\RecentAlert;
 use App\Services\SmsService;
 use Illuminate\Support\Facades\Log;
+use Filament\Notifications\Actions\Action as NotificationAction;
+use Filament\Notifications\Notification;
 
 class RecentAlertObserver
 {
@@ -19,16 +21,23 @@ class RecentAlertObserver
             'caregiver_number' => $recentAlert->caregiver->mobile_number
         ]);
 
-        $smsService = new SmsService();
-        $smsService->sendSms(
-            $recentAlert->caregiver->mobile_number,
-            '[Alert Type]: Critical Health Alert 🚨\n' .
-                'Patient Name: ' . $recentAlert->patient->last_name . ', ' . $recentAlert->patient->first_name . ' ' . $recentAlert->patient->middle_name . '\n' .
-                'Condition: High BPM Alert - ' . $recentAlert->bpm . ' BPM\n' .
-                'Time Detected: ' . now()->format('Y-m-d H:i:s') . '\n' .
-                'Location: ' . $recentAlert->patient->room . '/' . $recentAlert->patient->bed_number . '\n' .
+        Notification::make()
+            ->title('Alert Type: Critical Health Alert 🚨')
+            ->body(
+                'Patient Name: ' . $recentAlert->patient->last_name . ', ' . $recentAlert->patient->first_name . ' ' . $recentAlert->patient->middle_name . "\n" .
+                'Condition: High BPM Alert - ' . $recentAlert->bpm . ' BPM' . "\n" .
+                'Time Detected: ' . now()->format('Y-m-d H:i:s') . "\n" .
+                'Location: ' . $recentAlert->patient->room . '/' . $recentAlert->patient->bed_number . "\n" .
                 'Action Needed: Immediate check-up required.'
-        );
+            )
+            ->persistent()
+            ->actions([
+                NotificationAction::make('view')
+                    ->label('View Patient Record')
+                    ->button()
+                    ->url(route('filament.auth.resources.patients.edit', $recentAlert->patient_id)),
+            ])
+            ->sendToDatabase($recentAlert->caregiver);
     }
 
     /**

@@ -30,6 +30,14 @@ class DonationsChart extends ApexChartWidget
      */
     protected int|string|array $columnSpan = 'full';
 
+        /**
+     * Specify that this widget should only be used on resource pages
+     */
+    public static function canView(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
     /**
      * Chart options (series, labels, types, size, animations...)
      * https://apexcharts.com/docs/options

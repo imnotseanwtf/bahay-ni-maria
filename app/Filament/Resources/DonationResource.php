@@ -20,9 +20,14 @@ class DonationResource extends Resource
     protected static ?string $navigationLabel = 'Donations';
     protected static ?string $modelLabel = 'Donation';
     protected static ?string $pluralModelLabel = 'Donations';
-     protected static ?string $navigationGroup = 'Finance Management';
+    protected static ?string $navigationGroup = 'Finance Management';
 
     protected static ?string $navigationIcon = 'heroicon-o-gift';
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
 
     public static function form(Form $form): Form
     {

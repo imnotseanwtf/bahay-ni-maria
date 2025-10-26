@@ -24,6 +24,10 @@ class FinancialReportResource extends Resource
     protected static ?string $navigationGroup = 'Finance Management';
 
     protected static ?int $navigationSort = 1;
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
 
     public static function form(Form $form): Form
     {

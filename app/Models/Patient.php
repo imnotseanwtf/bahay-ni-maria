@@ -66,4 +66,15 @@ class Patient extends Model
     {
         return $this->hasMany(MedicalHistory::class);
     }
+
+    public function diseases()
+    {
+        return $this->belongsToMany(Disease::class, 'patient_diseases', 'patient_id', 'disease_id');
+    }
+
+    // Add this accessor method
+    public function getFullNameAttribute(): string
+    {
+        return trim($this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name);
+    }
 }

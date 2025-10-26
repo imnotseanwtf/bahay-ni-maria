@@ -9,6 +9,16 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class DonationStatsOverview extends BaseWidget
 {
+
+            /**
+     * Specify that this widget should only be used on resource pages
+     */
+    public static function canView(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
+
     protected function getStats(): array
     {
         $finanialReportSum = FinancialReport::sum('amount');

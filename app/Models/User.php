@@ -49,4 +49,14 @@ class User extends Authenticatable
             'user_type' => UserType::class
         ];
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->user_type == UserType::Admin();
+    }
+
+    public function isCaregiver(): bool
+    {
+        return $this->user_type == UserType::Caregiver();
+    }
 }

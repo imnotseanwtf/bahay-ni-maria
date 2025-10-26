@@ -15,6 +15,7 @@ class MedicalHistory extends Model
         'medical_problems',
         'list_all_allergies',
         'list_all_medications',
+        'schedule_date',
     ];
 
     public function patient()

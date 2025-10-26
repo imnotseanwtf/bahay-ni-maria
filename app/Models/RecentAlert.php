@@ -19,7 +19,7 @@ class RecentAlert extends Model
         'patient_id',
         'alert_type',
         'bpm',
-        'caregiver_id'
+        'caregiver_id',
     ];
 
     protected $casts = [
