@@ -33,29 +33,37 @@ class NotificationMonitor extends Component
 
     public function checkForNewNotifications()
     {
-        $user = Auth::user();
+        $user = Filament::auth()->user() ?? Auth::user();
+
+        if (! $user) {
+            $this->lastNotificationCount = 0;
+            $this->lastCheckedId = null;
+            return;
+        }
 
         // Get the latest unread notification
         $latestNotification = $user->unreadNotifications()->first();
 
+        // Handle no unread notifications explicitly
         if ($latestNotification === null) {
             $this->lastCheckedId = null;
+            $this->lastNotificationCount = $user->unreadNotifications()->count();
+            return;
         }
 
         // Check if there's a new notification
-        if ($latestNotification && $latestNotification->id !== $this->lastCheckedId) {
+        if ($latestNotification->id !== $this->lastCheckedId) {
             $data = $latestNotification->data;
-            
-            // Show pop-up notification on screen
+
             Notification::make()
                 ->title($data['title'] ?? 'New Notification')
                 ->body($data['body'] ?? '')
-                ->danger() // or ->success(), ->warning(), etc based on $data['color']
+                ->danger()
                 ->persistent()
-                ->duration(null) // Won't auto-dismiss
+                ->duration(null)
                 ->actions($this->buildActions($data))
-                ->send(); // THIS MAKES IT POP UP!
-            
+                ->send();
+
             // Update tracking
             $this->lastCheckedId = $latestNotification->id;
         }
