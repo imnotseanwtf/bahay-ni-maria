@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Filament\Facades\Filament;
 use Livewire\Component;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action as NotificationAction;
@@ -14,25 +15,33 @@ class NotificationMonitor extends Component
 
     public function mount()
     {
+        $user = Filament::auth()->user() ?? Auth::user();
+
+        if (! $user) {
+            $this->lastNotificationCount = 0;
+            $this->lastCheckedId = null;
+            return;
+        }
+
         // Get initial notification count
-        $this->lastNotificationCount = Auth::user()
-            ->unreadNotifications()
-            ->count();
-            
-        $latestNotification = Auth::user()
-            ->unreadNotifications()
-            ->first();
-            
-        $this->lastCheckedId = $latestNotification?->id;
+        $this->lastNotificationCount = $user->unreadNotifications()->count();
+
+        $latestNotification = $user->unreadNotifications()->first();
+
+        $this->lastCheckedId = $latestNotification?->id ?? null;
     }
 
     public function checkForNewNotifications()
     {
         $user = Auth::user();
-        
+
         // Get the latest unread notification
         $latestNotification = $user->unreadNotifications()->first();
-        
+
+        if ($latestNotification === null) {
+            $this->lastCheckedId = null;
+        }
+
         // Check if there's a new notification
         if ($latestNotification && $latestNotification->id !== $this->lastCheckedId) {
             $data = $latestNotification->data;
@@ -50,7 +59,7 @@ class NotificationMonitor extends Component
             // Update tracking
             $this->lastCheckedId = $latestNotification->id;
         }
-        
+
         $this->lastNotificationCount = $user->unreadNotifications()->count();
     }
     
