@@ -16,6 +16,8 @@ class Donation extends Model
         'item_description',
         'quantity',
         'expiration_date',
-        'remarks'
+        'remarks',
+        'kg',
+        'pieces',
     ];
 }

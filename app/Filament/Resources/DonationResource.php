@@ -17,10 +17,10 @@ class DonationResource extends Resource
 {
     protected static ?string $model = Donation::class;
 
-    protected static ?string $navigationLabel = 'Donations';
-    protected static ?string $modelLabel = 'Donation';
-    protected static ?string $pluralModelLabel = 'Donations';
-    protected static ?string $navigationGroup = 'Finance Management';
+    protected static ?string $navigationLabel = 'In-Kind ';
+    protected static ?string $modelLabel = 'In-Kind ';
+    protected static ?string $pluralModelLabel = 'In-Kind ';
+    protected static ?string $navigationGroup = 'Donations';
 
     protected static ?string $navigationIcon = 'heroicon-o-gift';
 
@@ -49,6 +49,10 @@ class DonationResource extends Resource
                         Forms\Components\DatePicker::make('expiration_date')
                             ->required(),
                         Forms\Components\TextInput::make('remarks')
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('kg')
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('pieces')
                             ->maxLength(255),
                     ])
                     ->columns(2),

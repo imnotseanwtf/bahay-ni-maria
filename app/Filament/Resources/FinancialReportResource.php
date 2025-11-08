@@ -18,10 +18,11 @@ class FinancialReportResource extends Resource
     protected static ?string $model = FinancialReport::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+     protected static ?string $navigationLabel = 'Cash';
+    protected static ?string $modelLabel = 'Cash';
+    protected static ?string $pluralModelLabel = 'Cash';
 
-    protected static ?string $navigationLabel = 'Financial Reports';
-
-    protected static ?string $navigationGroup = 'Finance Management';
+    protected static ?string $navigationGroup = 'Donations';
 
     protected static ?int $navigationSort = 1;
     public static function canViewAny(): bool

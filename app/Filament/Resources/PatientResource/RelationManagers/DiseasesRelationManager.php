@@ -13,12 +13,27 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class DiseasesRelationManager extends RelationManager
 {
     protected static string $relationship = 'diseases';
+ 
+    public static function getTitle($ownerRecord, string $pageClass): string
+    {
+        return 'Health';
+    }
+
+    public static function getModelLabel(): string
+    {
+        return 'Health';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Health';
+    }
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('disease_id')
-                    ->label('Disease')
+                    ->label('Health')
                     ->options(\App\Models\Disease::query()->pluck('name', 'id'))
                     ->preload()
                     ->searchable()
@@ -38,7 +53,7 @@ class DiseasesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                 ->createAnother(false)
-                ->label('Add Disease')
+                ->label('Add Health')
                 ->action(function($data) {
                     $this->getOwnerRecord()->diseases()->sync($data['disease_id']);
                     \Filament\Notifications\Notification::make()

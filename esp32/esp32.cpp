@@ -8,13 +8,13 @@
 // WiFi credentials
 #define WIFI_SSID "Doctora Wifi 2.4G"
 #define WIFI_PASSWORD "pitterdoctorawifi"
-#define API_URL "http://192.168.18.161/api/store-sensor-value"
+#define API_URL "https://lightskyblue-gnat-930724.hostingersite.com/api/store-sensor-value"
 #define DEVICE_ID "esp32-01"
 
 // GPS configuration
 TinyGPSPlus gps;
-#define RX_PIN 16  // Connect to NEO-6M TX
-#define TX_PIN 17  // Connect to NEO-6M RX
+#define RX_PIN 16 // Connect to NEO-6M TX
+#define TX_PIN 17 // Connect to NEO-6M RX
 #define GPS_BAUD 9600
 HardwareSerial gpsSerial(2);
 
@@ -54,8 +54,11 @@ void setup() {
       break;
     }
   }
-  
-  if (WiFi.status() == WL_CONNECTED) {
+
+
+
+
+  iFi.status() == WL_CONNECTED) {
     Serial.println("\n✅ Connected to Wi-Fi");
     Serial.print("IP Address: ");
     Serial.println(WiFi.localIP());
@@ -84,20 +87,54 @@ void loop() {
   // Read GPS data
   readGPSData();
   
-  // Read heart rate data
+  //
+
+   data
   readHeartRateData();
   
-  // Print combined sensor data
-  printSensorData();
-  
-  // Send data to server every 3 seconds
-  static unsigned long lastUpload = 0;
-  if (millis() - lastUpload > 3000) {
-    lastUpload = millis();
-    sendDataToServer();
+  //
+
+     ata
+  print
+              s
+          );
+
+  //
+
+
+
+
+
+
+
+
+
+
+
+
+           s
+  stati
+
+
+
+                   0;
+  if (m
+          is
+                   astUpl
+               ad > 3000) {
+               las
+
+             lis();
+    sen
+
+         ();
   }
 
-  delay(100);
+
+
+        a
+
+     0);
 }
 
 void readGPSData() {
@@ -107,12 +144,14 @@ void readGPSData() {
         latitude = gps.location.lat();
         longitude = gps.location.lng();
         gpsValid = true;
-        
-        if (gps.altitude.isValid()) {
+
+
+        altitude.isValid()) {
           altitude = gps.altitude.meters();
         }
-        
-        if (gps.speed.isValid()) {
+
+
+        speed.isValid()) {
           speed_kmh = gps.speed.kmph();
         }
       } else {
@@ -169,65 +208,175 @@ void printSensorData() {
   // Print combined JSON data to Serial
   Serial.print("{");
   
-  // GPS data
-  Serial.print("\"GPS\":{");
-  Serial.print("\"valid\":");
-  Serial.print(gpsValid ? "true" : "false");
-  Serial.print(",\"lat\":");
-  Serial.print(latitude, 6);
-  Serial.print(",\"lng\":");
-  Serial.print(longitude, 6);
-  Serial.print(",\"alt\":");
-  Serial.print(altitude, 2);
-  Serial.print(",\"speed\":");
-  Serial.print(speed_kmh, 2);
-  Serial.print("},");
+  //
+
+  a
+          r
+          GPS\":{");
+  Seria
+    rin
+      valid\":");
+  Seria
+    rin
+      Valid ? "true" : "false");
+  Seria
+    rin
+      "lat\":");
+  Seria
+    rin
+      itude, 6);
+  Seria
+    rin
+      "lng\":");
+  Seria
+    rin
+      gitude, 6);
+  Seria
+    rin
+      "alt\":");
+  Seria
+    rin
+      itude, 2);
+  Seria
+    rin
+      "speed\":");
+  Seria
+    rin
+      ed_kmh, 2);
+  Seria
+    rin
+      ");
   
-  // Heart rate data
-  Serial.print("\"HeartRate\":{");
-  Serial.print("\"BPM\":");
-  Serial.print(beatsPerMinute);
-  Serial.print(",\"AvgBPM\":");
-  Serial.print(beatAvg);
-  Serial.print(",\"Finger\":");
-  Serial.print(fingerDetected ? "true" : "false");
-  Serial.print("}");
-  
-  Serial.println("}");
-}
+  //
 
-void sendDataToServer() {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("❌ Wi-Fi not connected. Cannot send data.");
-    return;
-  }
+  a
 
-  // Only send if we have valid heart rate data (GPS can be optional)
-  if (!fingerDetected || beatsPerMinute < 30 || beatsPerMinute > 200) {
-    Serial.printf("⏩ Skip upload - Finger: %s, BPM: %d\n", fingerDetected ? "YES" : "NO", beatsPerMinute);
-    return;
-  }
 
-  HTTPClient http;
-  http.begin(API_URL);
-  http.addHeader(F("Content-Type"), F("application/json"));
-  http.setTimeout(5000);
+      a
+              r
+              HeartRate\":{");
+  Seria
+    rin
+      BPM\":");
+  Seria
+    rin
+      tsPerMinute);
+  Seria
+    rin
+      "AvgBPM\":");
+  Seria
+    rin
+      tAvg);
+  Seria
+    rin
+      "Finger\":");
+  Seria
+    rin
+      gerDetected ? "true" : "false");
+  Seria
+    rin
+      );
 
-  // Create JSON payload with both GPS and heart rate data
-  StaticJsonDocument<400> doc;
-  doc["device_identifier"] = DEVICE_ID;
-  doc["timestamp"] = millis();
-  
-  // Heart rate data
-  doc["bpm"] = beatsPerMinute;
+  Se
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      f (W
+
+               CONNECTED) {
+    Ser
+
+                      ❌ Wi-Fi not co n
+            nected. Cannot sed data.");
+    retur
+
+
+
+
+
+
+
+
+
+
+        heart rate data (GPS
+
+                 onal)
+  if (!fi rDete
+        rM
+          || beatsPerMinute > 200) {
+    Seria
+
+
+                   Finger: %
+          , BPM:  %d \n
+          , f ing erD etected ? "YES" : "NO ",  beats Pe rMinute);
+    retur
+                      TTP
+
+
+
+
+
+                begi
+    PI_URL);
+  http.addH
+    er(F("C
+      t-Type"), F("application/json"));
+  http.setT
+    out(500
+        // Creat
+
+    ON pay
+
+  ith both GPS and heart rate data
+  StaticJso
+        cument<
+          doc;
+  doc[
+              devi
+    identifier"] = DEVICE_ID;
+  doc["time
+    mp"] = millis();
+
+  // Hea
+
+
+  doc["bpm"
+       beatsPerMinute;
   doc["avg_bpm"] = beatAvg;
   doc["finger_detected"] = fingerDetected;
   
-  // GPS data
-  doc["gps_valid"] = gpsValid;
+  // GPS
+
+  doc["g
+
+  id"] = gpsValid;
   if (gpsValid) {
-    doc["latitude"] = latitude;
-    doc["longitude"] = longitude;
+    doc["la
+      e"] = latitude;
+    doc["lo
+      de"] = longitude;
   }
 
   String payload;
@@ -237,41 +386,112 @@ void sendDataToServer() {
 
   if (httpCode > 0) {
     Serial.printf("📤 Data uploaded - BPM: %d, GPS: %s [HTTP: %d]\n", 
-                  beatsPerMinute, gpsValid ? "VALID" : "INVALID", httpCode);
+
+
+
+                  VALID" : "INVALID", httpCode);
     
-    if (httpCode == 200) {
-      String response = http.getString();
-      Serial.println("✅ Server response: " + response);
+    if (
+
+    0) {
+
+         S
+
+
+
+
+
+
+
+
+                         " + response);
     }
   } else {
-    Serial.printf("❌ Upload error: %s\n", http.errorToString(httpCode).c_str());
+    Serial.prin
+           Upload e
+                \n", http.er ror
+                               ToS tring(httpCode).c_str());
   }
 
   http.end();
 }
 
-void displayDetailedInfo() {
-  // Detailed GPS info (call this function manually if needed for debugging)
-  Serial.println("\n=== DETAILED SENSOR INFO ===");
+void displ
+    y
+      e
+
+       a
+
+  edInfo()
+
+
+          Detailed G
+            fo (call this function manually if needed for debugging)
+  Serial.println(
+    === DETAILED SENSOR INFO ===");
   
-  if (gpsValid) {
-    Serial.printf("📍 GPS Location: %.6f, %.6f\n", latitude, longitude);
+  if (gpsValid
+
+  al.printf("📍 GPS Location: %.6f, %.6f\n", latitude, longitude);
     Serial.printf("🏔️  Altitude: %.2f meters\n", altitude);
     Serial.printf("🚗 Speed: %.2f km/h\n", speed_kmh);
     
-    if (gps.date.isValid() && gps.time.isValid()) {
-      Serial.printf("📅 Date: %04d-%02d-%02d\n", gps.date.year(), gps.date.month(), gps.date.day());
-      Serial.printf("🕐 Time: %02d:%02d:%02d UTC\n", gps.time.hour(), gps.time.minute(), gps.time.second());
+    if (gps.date.isV
+
+    gps.time.isValid()) {
+      Serial.printf("📅 D
+    4d-%02d-%02d\n", gps.date.year(), gps.date.month(), gps.date.day());
+      Serial.printf("🕐 Tim
+    :%02d:%02d UTC\n", gps.time.hour(), gps.time.minute(), gps.time.second());
     }
   } else {
-    Serial.println("📍 GPS: No valid fix");
-  }
+    Serial.print
+
+      G
+      S
+   N
+
+        ;
+
+
+
+
+
+
+
+
+
+
+
+                          te:
+
+
+
+                M
+
+        BPM )\n",b
+
+
+
+
+
+
+
+                           sPer
+
+
+
+
+                  ial.prin
+    a
+    t Rate
+      nger detected"
+          ;
+                }
   
-  if (fingerDetected) {
-    Serial.printf("💓 Heart Rate: %d BPM (Avg: %d BPM)\n", beatsPerMinute, beatAvg);
-  } else {
-    Serial.println("💓 Heart Rate: No finger detected");
-  }
-  
-  Serial.println("============================\n");
+
+i
+
+
+  ==\n");
 }

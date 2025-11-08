@@ -6,6 +6,7 @@ use App\Filament\Resources\DiseaseResource;
 use App\Filament\Resources\DonationResource;
 use App\Filament\Resources\FinancialReportResource;
 use App\Filament\Resources\PatientResource;
+use App\Filament\Resources\RecentAlertResource;
 use App\Filament\Resources\UserResource;
 use App\Filament\Widgets\BpmMonitoring;
 use App\Filament\Widgets\DonationsChart;
@@ -45,6 +46,7 @@ class AuthPanelProvider extends PanelProvider
                 'primary' => Color::Blue,
             ])
             ->resources([
+                RecentAlertResource::class,
                 PatientResource::class,
                 DiseaseResource::class,
                 UserResource::class,
@@ -60,7 +62,7 @@ class AuthPanelProvider extends PanelProvider
                     //                Widgets\AccountWidget::class,
 //                Widgets\FilamentInfoWidget::class,
                 PatientInformationChart::class,
-                RecentAlertsTable::class,
+                // RecentAlertsTable::class,
                 DonationStatsOverview::class,
                 DonationsChart::class,
                 BpmMonitoring::class,

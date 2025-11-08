@@ -57,12 +57,6 @@ class User extends Authenticatable
 
     public function isCaregiver(): bool
     {
-        $type = $this->user_type;
-
-        if ($type instanceof \App\Enums\UserType) {
-            return $type->isOneOf([\App\Enums\UserType::Caregiver, \App\Enums\UserType::Sister]);
-        }
-
-        return in_array($type, [\App\Enums\UserType::Caregiver, \App\Enums\UserType::Sister], true);
+        return in_array($this->user_type, [UserType::Caregiver(), UserType::Sister()]);
     }
 }
