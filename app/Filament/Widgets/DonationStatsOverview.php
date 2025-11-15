@@ -10,6 +10,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class DonationStatsOverview extends BaseWidget
 {
 
+    protected ?string $heading = 'Donation Statistics';
+
             /**
      * Specify that this widget should only be used on resource pages
      */

@@ -16,12 +16,19 @@ use Filament\Notifications\Notification;
 class RecentAlertsTable extends BaseWidget
 {
     protected int|string|array $columnSpan = 'full';
+   
+    public static function canView(): bool
+    {
+        return auth()->user()->isCaregiver();
+    }
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
-                RecentAlert::query()
+                auth()->user()->isCaregiver()
+                    ? RecentAlert::whereHas('patient', fn($q) => $q->where('caregiver_id', auth()->id()))
+                    : RecentAlert::query()
             )
             ->columns([
                 Tables\Columns\TextColumn::make('patient.full_name')

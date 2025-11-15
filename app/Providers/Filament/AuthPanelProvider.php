@@ -62,7 +62,7 @@ class AuthPanelProvider extends PanelProvider
                     //                Widgets\AccountWidget::class,
 //                Widgets\FilamentInfoWidget::class,
                 PatientInformationChart::class,
-                // RecentAlertsTable::class,
+                RecentAlertsTable::class,
                 DonationStatsOverview::class,
                 DonationsChart::class,
                 BpmMonitoring::class,

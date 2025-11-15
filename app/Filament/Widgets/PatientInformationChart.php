@@ -13,7 +13,7 @@ class PatientInformationChart extends BaseWidget
      *
      * @var string|null
      */
-    protected ?string $heading = 'Patient Diseases';
+    protected ?string $heading = 'Patient Health';
 
     /**
      * Specify that this widget should only be used on resource pages

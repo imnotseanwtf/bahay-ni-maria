@@ -55,7 +55,7 @@ class DiseasesRelationManager extends RelationManager
                 ->createAnother(false)
                 ->label('Add Health')
                 ->action(function($data) {
-                    $this->getOwnerRecord()->diseases()->sync($data['disease_id']);
+                    $this->getOwnerRecord()->diseases()->attach($data['disease_id']);
                     \Filament\Notifications\Notification::make()
                         ->title('Disease added successfully')
                         ->success()
@@ -65,6 +65,7 @@ class DiseasesRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\Action::make('detach')
                     ->label('Remove')
+                    ->requiresConfirmation()
                     ->icon('heroicon-o-trash')
                     ->color('danger')
                     ->action(fn($record) => $this->getOwnerRecord()->diseases()->detach($record->id)),

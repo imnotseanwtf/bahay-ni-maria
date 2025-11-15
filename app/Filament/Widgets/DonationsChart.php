@@ -21,7 +21,7 @@ class DonationsChart extends ApexChartWidget
      *
      * @var string|null
      */
-    protected static ?string $heading = 'Monthly Donations & Financial Reports';
+    protected static ?string $heading = 'Monthly Donations';
 
     /**
      * Widget column span
@@ -46,20 +46,15 @@ class DonationsChart extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-        // Get current year or you can modify this to get specific year
-        $currentYear = now()->year;
-
         // Get monthly donations count
-        $monthlyDonations = Donation::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-            ->whereYear('created_at', $currentYear)
+        $monthlyDonations = Donation::selectRaw('MONTH(date_recieved) as month, COUNT(*) as count')
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('count', 'month')
             ->toArray();
 
         // Get monthly financial reports count
-        $monthlyFinancialReports = FinancialReport::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-            ->whereYear('created_at', $currentYear)
+        $monthlyFinancialReports = FinancialReport::selectRaw('MONTH(date_recieved) as month, COUNT(*) as count')
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('count', 'month')
@@ -91,7 +86,7 @@ class DonationsChart extends ApexChartWidget
                     'data' => $donationsData,
                 ],
                 [
-                    'name' => 'Financial Reports',
+                    'name' => 'In Kind Donations',
                     'data' => $financialReportsData,
                 ],
             ],
