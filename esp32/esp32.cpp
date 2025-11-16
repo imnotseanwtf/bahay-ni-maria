@@ -8,7 +8,7 @@
 // WiFi credentials
 #define WIFI_SSID "Fatima"
 #define WIFI_PASSWORD "1234567890"
-#define API_URL "https://lightskyblue-gnat-930724.hostingersite.com/api/store-sensor-value"
+#define API_URL "https://bahay-ni-maria.online/api/store-sensor-value"
 #define DEVICE_ID "esp32-01"
 
 // GPS configuration
