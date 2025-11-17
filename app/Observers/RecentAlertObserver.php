@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\RecentAlert;
 use App\Services\SmsService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Filament\Notifications\Actions\Action as NotificationAction;
 use Filament\Notifications\Notification;
 
@@ -15,29 +16,31 @@ class RecentAlertObserver
      */
     public function created(RecentAlert $recentAlert): void
     {
+        // Reload with relationships to ensure they're available
+        $recentAlert->load(['patient', 'caregiver']);
+
         Log::warning('BPM Alert triggered', [
             'patient_id' => $recentAlert->patient_id,
             'bpm_value' => $recentAlert->bpm,
-            'caregiver_number' => $recentAlert->caregiver->mobile_number
+            'caregiver_number' => $recentAlert->caregiver?->mobile_number
         ]);
 
-        Notification::make()
-            ->title('Alert Type: Critical Health Alert 🚨')
-            ->body(
-                'Patient Name: ' . $recentAlert->patient->last_name . ', ' . $recentAlert->patient->first_name . ' ' . $recentAlert->patient->middle_name . "\n" .
-                'Condition: High BPM Alert - ' . $recentAlert->bpm . ' BPM' . "\n" .
-                'Time Detected: ' . now()->format('Y-m-d H:i:s') . "\n" .
-                'Location: ' . $recentAlert->patient->room . '/' . $recentAlert->patient->bed_number . "\n" .
-                'Action Needed: Immediate check-up required.'
-            )
-            ->persistent()
-            ->actions([
-                NotificationAction::make('view')
-                    ->label('View Patient Record')
-                    ->button()
-                    ->url(route('filament.auth.resources.patients.edit', $recentAlert->patient_id)),
-            ])
-            ->sendToDatabase($recentAlert->caregiver);
+        // Store alert in cache queue for batch processing
+        $alertData = [
+            'recent_alert_id' => $recentAlert->id,
+            'patient_id' => $recentAlert->patient_id,
+            'caregiver_id' => $recentAlert->caregiver_id,
+            'bpm' => $recentAlert->bpm,
+            'patient_name' => $recentAlert->patient->last_name . ', ' . $recentAlert->patient->first_name . ' ' . $recentAlert->patient->middle_name,
+            'room' => $recentAlert->patient->room,
+            'bed_number' => $recentAlert->patient->bed_number,
+            'created_at' => now()->toIso8601String(),
+        ];
+
+        // Add to cache queue
+        $queue = Cache::get('recent_alerts_queue', []);
+        $queue[] = $alertData;
+        Cache::put('recent_alerts_queue', $queue, now()->addHours(1));
     }
 
     /**

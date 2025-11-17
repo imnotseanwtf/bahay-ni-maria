@@ -34,25 +34,33 @@ class FinancialReportResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Fieldset::make('Financial Report Details')
+                Forms\Components\Fieldset::make('Cash Donation Details')
                     ->schema([
                         Forms\Components\DatePicker::make('date_recieved')
                             ->required()
                             ->label('Date Received'),
                         Forms\Components\TextInput::make('donor_name')
                             ->required()
-                            ->label('Donor Name'),
-                        Forms\Components\TextInput::make('payment_method')
+                            ->label('Donor Name')
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
+                        Forms\Components\Select::make('payment_method')
                             ->required()
-                            ->label('Payment Method'),
+                            ->label('Payment Method')
+                            ->options([
+                                'Cash' => 'Cash',
+                                'Online Payment' => 'Online Payment',
+                            ])
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
                         Forms\Components\TextInput::make('amount')
                             ->required()
                             ->numeric()
                             ->prefix('₱')
-                            ->label('Amount'),
+                            ->label('Amount')
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
                         Forms\Components\Textarea::make('remarks')
                             ->label('Remarks')
                             ->columnSpanFull()
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
                     ])
             ]);
     }

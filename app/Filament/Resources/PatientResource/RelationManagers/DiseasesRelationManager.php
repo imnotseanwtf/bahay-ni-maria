@@ -16,24 +16,24 @@ class DiseasesRelationManager extends RelationManager
  
     public static function getTitle($ownerRecord, string $pageClass): string
     {
-        return 'Health';
+        return 'Health Status';
     }
 
     public static function getModelLabel(): string
     {
-        return 'Health';
+        return 'Health Status';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Health';
+        return 'Health Status';
     }
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('disease_id')
-                    ->label('Health')
+                    ->label('Health Status')
                     ->options(\App\Models\Disease::query()->pluck('name', 'id'))
                     ->preload()
                     ->searchable()

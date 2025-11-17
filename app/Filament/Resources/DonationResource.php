@@ -39,21 +39,31 @@ class DonationResource extends Resource
                             ->required(),
                         Forms\Components\TextInput::make('donor_name')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
                         Forms\Components\TextInput::make('item_description')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
                         Forms\Components\TextInput::make('quantity')
                             ->required()
-                            ->numeric(),
+                            ->numeric()
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
                         Forms\Components\DatePicker::make('expiration_date')
                             ->required(),
                         Forms\Components\TextInput::make('remarks')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('kg')
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('pieces')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
+                        Forms\Components\Select::make('kg')
+                            ->label('Unit of Measurement')
+                            ->options([
+                                'kg' => 'Kilogram',
+                                'bundle' => 'Bundle',
+                                'pieces' => 'Pieces'
+                            ])
+                            ->required()
+                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord)
+                            ->columnSpanFull(),
                     ])
                     ->columns(2),
             ]);

@@ -112,13 +112,13 @@ class RecentAlertResource extends Resource
 
                         Notification::make()
                             ->title('Alert Sent Successfully')
-                            ->body('The alert has been sent to the caregiver.')
+                            ->body('The alert notification has been sent to the caregiver.')
                             ->success()
                             ->send();
                     })
                     ->requiresConfirmation()
-                    ->modalHeading('Send Alert SMS')
-                    ->modalDescription('Are you sure you want to send an alert SMS to the caregiver?')
+                    ->modalHeading('Send Alert Notification')
+                    ->modalDescription('Are you sure you want to send an alert notification to the caregiver?')
                     ->color('warning')
                     ->visible(auth()->user()->isAdmin()),
             ])

@@ -23,12 +23,13 @@ class DonationStatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        $finanialReportSum = FinancialReport::sum('amount');
-
+        $financialReportSumRaw = FinancialReport::sum('amount');
+        $financialReportSum = number_format($financialReportSumRaw, 2, '.', ',');
+        
         $overallDonations = Donation::count();
 
         return [
-            Stat::make('Overall Donation Amount', '₱' . $finanialReportSum),
+            Stat::make('Overall Donation Amount', '₱' . $financialReportSum),
             Stat::make('Overall In-Kind Donations', $overallDonations)
         ];
     }

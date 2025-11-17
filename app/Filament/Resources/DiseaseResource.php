@@ -18,9 +18,9 @@ class DiseaseResource extends Resource
     protected static ?string $model = Disease::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-heart';
-        protected static ?string $navigationLabel = 'Health';
-    protected static ?string $modelLabel = 'Health';
-    protected static ?string $pluralModelLabel = 'Health';
+    protected static ?string $navigationLabel = 'Health Status';
+    protected static ?string $modelLabel = 'Health Status';
+    protected static ?string $pluralModelLabel = 'Health Status';
 
     public static function canViewAny(): bool
     {
