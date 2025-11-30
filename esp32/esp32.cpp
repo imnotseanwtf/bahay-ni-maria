@@ -1,4 +1,3 @@
-#include <TinyGPSPlus.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -11,12 +10,9 @@
 #define API_URL "https://bahay-ni-maria.online/api/store-sensor-value"
 #define DEVICE_ID "esp32-01"
 
-// GPS configuration
-TinyGPSPlus gps;
-#define RX_PIN 16  // Connect to NEO-6M TX
-#define TX_PIN 17  // Connect to NEO-6M RX
-#define GPS_BAUD 9600
-HardwareSerial gpsSerial(2);
+// Hardcoded location coordinates
+#define LATITUDE 14.212225892233423
+#define LONGITUDE 121.16746625217154
 
 // Heart rate sensor
 MAX30105 particleSensor;
@@ -29,11 +25,6 @@ long lastBeat = 0;
 int beatsPerMinute = 0;
 int beatAvg = 0;
 bool fingerDetected = false;
-float latitude = 0.0;
-float longitude = 0.0;
-float altitude = 0.0;
-float speed_kmh = 0.0;
-bool gpsValid = false;
 
 void connectToWiFi() {
   Serial.println("Connecting to Wi-Fi...");
@@ -54,14 +45,10 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
 
-  Serial.println("ESP32 GPS + Heart Rate Monitor Starting...");
+  Serial.println("ESP32 Heart Rate Monitor Starting...");
 
   // Initialize WiFi - will retry until connected
   connectToWiFi();
-
-  // Initialize GPS
-  gpsSerial.begin(GPS_BAUD, SERIAL_8N1, RX_PIN, TX_PIN);
-  Serial.println("GPS Module initialized");
 
   // Initialize Heart Rate Sensor
   Serial.println("Initializing MAX30102...");
@@ -74,7 +61,7 @@ void setup() {
     particleSensor.setPulseAmplitudeGreen(0);   // Turn off green LED
   }
 
-  Serial.println("Place your finger on the sensor and wait for GPS fix...");
+  Serial.println("Place your finger on the sensor...");
   delay(2000);
 }
 
@@ -85,13 +72,10 @@ void loop() {
     connectToWiFi();
   }
 
-  // Read GPS data
-  readGPSData();
-
   // Read Heart Rate data
   readHeartRateData();
 
-  // Print combined data to Serial
+  // Print sensor data to Serial
   printSensorData();
 
   // Upload data to server every 3 seconds
@@ -99,33 +83,6 @@ void loop() {
   if (millis() - lastUpload > 3000) {
     lastUpload = millis();
     uploadSensorData();
-  }
-}
-
-void readGPSData() {
-  while (gpsSerial.available() > 0) {
-    if (gps.encode(gpsSerial.read())) {
-      if (gps.location.isValid()) {
-        latitude = gps.location.lat();
-        longitude = gps.location.lng();
-        gpsValid = true;
-
-        if (gps.altitude.isValid()) {
-          altitude = gps.altitude.meters();
-        }
-
-        if (gps.speed.isValid()) {
-          speed_kmh = gps.speed.kmph();
-        }
-      } else {
-        gpsValid = false;
-      }
-    }
-  }
-
-  // GPS timeout check
-  if (millis() > 10000 && gps.charsProcessed() < 10) {
-    gpsValid = false;
   }
 }
 
@@ -168,22 +125,8 @@ void readHeartRateData() {
 }
 
 void printSensorData() {
-  // Print combined JSON data to Serial
+  // Print JSON data to Serial
   Serial.print("{");
-
-  // GPS Data
-  Serial.print("\"GPS\":{");
-  Serial.print("\"valid\":");
-  Serial.print(gpsValid ? "true" : "false");
-  Serial.print(",\"lat\":");
-  Serial.print(latitude, 6);
-  Serial.print(",\"lng\":");
-  Serial.print(longitude, 6);
-  Serial.print(",\"alt\":");
-  Serial.print(altitude, 2);
-  Serial.print(",\"speed\":");
-  Serial.print(speed_kmh, 2);
-  Serial.print("},");
 
   // Heart Rate Data
   Serial.print("\"HeartRate\":{");
@@ -193,6 +136,14 @@ void printSensorData() {
   Serial.print(beatAvg);
   Serial.print(",\"FingerDetected\":");
   Serial.print(fingerDetected ? "true" : "false");
+  Serial.print("},");
+
+  // Location Data
+  Serial.print("\"Location\":{");
+  Serial.print("\"lat\":");
+  Serial.print(LATITUDE, 6);
+  Serial.print(",\"lng\":");
+  Serial.print(LONGITUDE, 6);
   Serial.print("}");
 
   Serial.println("}");
@@ -223,13 +174,10 @@ void uploadSensorData() {
 
   // Create JSON payload matching API requirements
   StaticJsonDocument<512> doc;
-  doc["device_identifier"] = DEVICE_ID;  // Changed from device_id
+  doc["device_identifier"] = DEVICE_ID;
   doc["bpm"] = beatsPerMinute;
-  
-
-    doc["latitude"] = 14.212225892233423;
-    doc["longitude"] = 121.16746625217154;
-  
+  doc["latitude"] = LATITUDE;
+  doc["longitude"] = LONGITUDE;
 
   String payload;
   serializeJson(doc, payload);
@@ -237,7 +185,7 @@ void uploadSensorData() {
   int httpCode = http.POST(payload);
 
   if (httpCode > 0) {
-    Serial.printf("📤 Data uploaded - BPM: %d, GPS: %s [HTTP: %d]\n", beatsPerMinute, gpsValid ? "VALID" : "INVALID", httpCode);
+    Serial.printf("📤 Data uploaded - BPM: %d [HTTP: %d]\n", beatsPerMinute, httpCode);
     String response = http.getString();
     Serial.println(response);
   } else {
