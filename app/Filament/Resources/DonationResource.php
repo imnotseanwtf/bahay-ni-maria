@@ -49,21 +49,24 @@ class DonationResource extends Resource
                             ->required()
                             ->numeric()
                             ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
-                        Forms\Components\DatePicker::make('expiration_date')
-                            ->required(),
+                        // Forms\Components\DatePicker::make('expiration_date')
+                        //     ->required(),
                         Forms\Components\TextInput::make('remarks')
                             ->maxLength(255)
                             ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
-                        Forms\Components\Select::make('kg')
-                            ->label('Unit of Measurement')
-                            ->options([
-                                'kg' => 'Kilogram',
-                                'bundle' => 'Bundle',
-                                'pieces' => 'Pieces'
-                            ])
-                            ->required()
-                            ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord)
-                            ->columnSpanFull(),
+                    Forms\Components\Select::make('kg')
+    ->label('Unit of Measurement')
+    ->options([
+        'kg' => 'Kilogram',
+        'pieces' => 'Pieces',
+        'packs' => 'Packs/Sachets',
+        'boxes' => 'Boxes',
+        'bottles' => 'Bottles',
+        'liters' => 'Liters',
+        'bundle' => 'Bundle',
+    ])
+    ->required()
+    ->disabled(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\EditRecord),
                     ])
                     ->columns(2),
             ]);
@@ -85,9 +88,9 @@ class DonationResource extends Resource
                 Tables\Columns\TextColumn::make('quantity')
                     ->sortable()
                     ->numeric(),
-                Tables\Columns\TextColumn::make('expiration_date')
-                    ->sortable()
-                    ->date(),
+                // Tables\Columns\TextColumn::make('expiration_date')
+                //     ->sortable()
+                //     ->date(),
                 Tables\Columns\TextColumn::make('remarks')
                     ->searchable(),
             ])

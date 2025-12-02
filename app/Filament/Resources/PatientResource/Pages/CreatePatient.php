@@ -44,16 +44,32 @@ class CreatePatient extends CreateRecord
                     ->schema([
                         TextInput::make('last_name')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Last name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('first_name')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'First name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('middle_name')
                             ->nullable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Middle name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('maiden_name')
                             ->nullable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Maiden name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                     ])->columns(2),
 
                 Fieldset::make('Contact Information')
@@ -73,14 +89,19 @@ class CreatePatient extends CreateRecord
                         TextInput::make('phone')
                             ->tel()
                             ->required()
-                            ->maxLength(255),
+                            ->prefix('+63')
+                            ->numeric()
+                            ->minLength(10)
+                            ->maxLength(10)
+                            ->placeholder('9123456789')
+                            ->helperText('Enter 10-digit mobile number (e.g., 9123456789)'),
                     ])->columns(2),
 
                 Fieldset::make('Birth Information')
                     ->schema([
                         DatePicker::make('birth_date')
-    ->required()
-    ->maxDate(now()),
+                            ->required()
+                            ->maxDate(now()),
                         TextInput::make('birth_place')
                             ->required()
                             ->maxLength(255),
@@ -90,10 +111,12 @@ class CreatePatient extends CreateRecord
                     ->schema([
                         TextInput::make('height')
                             ->nullable()
+                            ->numeric()
                             ->maxLength(255)
                             ->suffix('cm'),
                         TextInput::make('weight')
                             ->nullable()
+                            ->numeric()
                             ->maxLength(255)
                             ->suffix('kg'),
                     ])->columns(2),
@@ -105,41 +128,75 @@ class CreatePatient extends CreateRecord
                             ->options(MaritalStatus::asSelectArray()),
                         TextInput::make('spouse_last_name')
                             ->nullable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Last name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('spouse_first_name')
                             ->nullable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'First name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('spouse_middle_name')
                             ->nullable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Middle name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('spouse_maiden_name')
                             ->nullable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Maiden name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                     ])->columns(2),
 
                 Fieldset::make('Emergency Contact')
                     ->schema([
                         TextInput::make('emergency_contact_name')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('emergency_contact_relationship')
                             ->required()
                             ->maxLength(255),
                         TextInput::make('emergency_contact_phone')
                             ->tel()
                             ->required()
-                            ->maxLength(255),
+                            ->prefix('+63')
+                            ->numeric()
+                            ->minLength(10)
+                            ->maxLength(10)
+                            ->placeholder('9123456789')
+                            ->helperText('Enter 10-digit mobile number (e.g., 9123456789)'),
                     ])->columns(3),
 
                 Fieldset::make('Guardian Information')
                     ->schema([
                         TextInput::make('guardian_name')
                             ->nullable()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->regex('/^[a-zA-Z\s\-\.]+$/')
+                            ->validationMessages([
+                                'regex' => 'Name must only contain letters, spaces, hyphens, and periods.',
+                            ]),
                         TextInput::make('guardian_phone')
                             ->tel()
                             ->nullable()
-                            ->maxLength(255),
+                            ->prefix('+63')
+                            ->numeric()
+                            ->minLength(10)
+                            ->maxLength(10)
+                            ->placeholder('9123456789')
+                            ->helperText('Enter 10-digit mobile number (e.g., 9123456789)'),
                     ])->columns(2),
 
             ]);
