@@ -79,7 +79,8 @@ class CreatePatient extends CreateRecord
                 Fieldset::make('Birth Information')
                     ->schema([
                         DatePicker::make('birth_date')
-                            ->required(),
+    ->required()
+    ->maxDate(now()),
                         TextInput::make('birth_place')
                             ->required()
                             ->maxLength(255),

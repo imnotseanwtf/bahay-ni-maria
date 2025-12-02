@@ -104,8 +104,9 @@ class EditPatient extends EditRecord
 
                 Fieldset::make('Birth Information')
                     ->schema([
-                        DatePicker::make('birth_date')
-                            ->required(),
+                          DatePicker::make('birth_date')
+    ->required()
+    ->maxDate(now()),
                         TextInput::make('birth_place')
                             ->required()
                             ->maxLength(255),
